@@ -1,34 +1,69 @@
-import * as React from 'react';
-import { Text, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Home from "../screens/Home";
-import Search from "../screens/Search";
-import Notifications from "../screens/Notifications";
-import Profile from "../screens/Profile";
+import React from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
+import Home from "../screens/Tabs/Home";
+import Profile from "../screens/Tabs/Profile";
+import Search from "../screens/Tabs/Search";
+import Notifications from "../screens/Tabs/Notifications";
 
+const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-export default () => {
-  return(
-      <Tab.Navigator>
-        <Tab.Screen name="Home" component={Home} />
-        <Tab.Screen name="Search" component={Search} />
-        <Tab.Screen 
-          name="View" 
-          component={View}
-          listeners={({ navigation, route }) => ({
-            tabPress: e => {
-              // Prevent default action
-              e.preventDefault();
-        
-              // Do something with the `navigation` object
-              navigation.navigate('PhotoNavigation');
-            },
-          })}
-        />
-        <Tab.Screen name="Notifications" component={Notifications} />
-        <Tab.Screen name="Profile" component={Profile} />
-      </Tab.Navigator>
-  );
-};
+const stackFactory = (initialRoute, name, customConfig) => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name={name}
+      component={initialRoute}
+      options={{ ...customConfig }}
+    />
+  </Stack.Navigator>
+);
+
+export default () => (
+  <Tab.Navigator>
+    <Tab.Screen name="Home">
+      {() =>
+        stackFactory(Home, "Home", {
+          title: "Home",
+          headerRight: () => (
+            <TouchableOpacity>
+              <Text>Hello</Text>
+            </TouchableOpacity>
+          ),
+        })
+      }
+    </Tab.Screen>
+    <Tab.Screen name="Search">
+      {() =>
+        stackFactory(Search, "Search", {
+          title: "Search",
+        })
+      }
+    </Tab.Screen>
+    <Tab.Screen
+      name="Add"
+      component={View}
+      listeners={({ navigation }) => ({
+        tabPress: (e) => {
+          e.preventDefault();
+          navigation.navigate("PhotoNavigation");
+        },
+      })}
+    />
+    <Tab.Screen name="Notifications">
+      {() =>
+        stackFactory(Notifications, "Notifications", {
+          title: "Notifications",
+        })
+      }
+    </Tab.Screen>
+    <Tab.Screen name="Profile">
+      {() =>
+        stackFactory(Profile, "Profile", {
+          title: "Profile",
+        })
+      }
+    </Tab.Screen>
+  </Tab.Navigator>
+);
