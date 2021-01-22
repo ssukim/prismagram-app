@@ -1,11 +1,12 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import Home from "../screens/Tabs/Home";
 import Profile from "../screens/Tabs/Profile";
 import Search from "../screens/Tabs/Search";
 import Notifications from "../screens/Tabs/Notifications";
+import MessagesLink from "../components/MessagesLink";
+import { View } from "react-native";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -27,9 +28,7 @@ export default () => (
         stackFactory(Home, "Home", {
           title: "Home",
           headerRight: () => (
-            <TouchableOpacity>
-              <Text>Hello</Text>
-            </TouchableOpacity>
+            <MessagesLink />
           ),
         })
       }
